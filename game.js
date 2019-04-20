@@ -9,17 +9,27 @@ const cards = [
 const cell = document.querySelector('.deck .cell');
 const pile = document.querySelector('.deck .pile');
 const deckElem = document.querySelector('.deck');
+const deck = document.querySelector('.deck');
+const cells = document.querySelectorAll('.board .cell');
 
 function Game() {
     this.deck = [];
     this.cardElements = [];
     this.cardNumber = 0;
+    this.hands = Array(25);
+    this.canCLick = true;
     
     this.start = function() {
+        this.initCells();
         this.shuffle();
         this.createPile();
         this.drawCard();
-        console.log(this.deck);
+    }
+    
+    this.initCells = function() {
+        for(let i = 0; i < 25; i++) {
+            cells[i].onclick = () => this.place(i);
+        }
     }
     
     this.shuffle = function() {
@@ -48,8 +58,25 @@ function Game() {
     this.faceUp = function() {
         let cardIndex = cards.indexOf(this.deck[this.cardNumber]);
         this.cardElements[this.cardNumber].style.background = "url(" + bg + ") -" + ((cardIndex % 13) * 73 + 2) + "px -" + (Math.floor(cardIndex / 13) * 98 + 1) + "px";
+        this.canClick = true;
+    }
+    
+    this.place = function(index) {
+        if(this.canClick && !this.hands[index]) {
+            this.canClick = false;
+            let card = this.cardElements[this.cardNumber];
+            let cell = cells[index];
+            card.style.top = "-" + (deck.offsetTop - cell.offsetTop) + "px";
+            card.style.left = (cell.offsetLeft - 8) + "px";
+            card.classList.add('rotate');
+            this.hands[index] = this.deck[this.cardNumber];
+            this.cardNumber++;
+            this.drawCard();
+        }
     }
 }
 
-const game = new Game();
-game.start();
+window.onload = function() {
+    const game = new Game();
+    game.start();
+}

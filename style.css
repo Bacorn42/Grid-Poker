@@ -6,11 +6,15 @@ body {
     width: 71px;
     height: 97px;
     background: repeating-linear-gradient(to top right, #009 0%, #FFF 2%);
-    transition: left 1s;
+    transition: left 1s, top 1s;
 }
 
 .flip {
-    animation: flip 0.3s linear 0.6s
+    animation: flip 0.3s linear 0.6s;
+}
+.rotate {
+    animation: rotate 1s;
+    animation-fill-mode: forwards;
 }
 
 @keyframes flip {
@@ -25,6 +29,15 @@ body {
     100%  {
         width: 71px;
         margin-left: 0;
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(180deg);
     }
 }
 
