@@ -1,0 +1,11 @@
+body {
+    background-color: #CCC;
+}
+
+.cell {
+    width: 71px;
+    height: 97px;
+    background-color: #AAA;
+    margin: 10px;
+    display: inline-block;
+}
