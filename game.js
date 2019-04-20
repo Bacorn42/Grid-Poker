@@ -39,8 +39,10 @@ function Game() {
     }
     
     this.drawCard = function() {
-        this.cardElements[this.cardNumber].style.left = cell.offsetLeft;
-        setTimeout(() => this.faceUp(), 1000);
+        let card = this.cardElements[this.cardNumber]
+        card.style.left = cell.offsetLeft;
+        card.classList.add('flip');
+        setTimeout(() => this.faceUp(), 750);
     }
     
     this.faceUp = function() {
