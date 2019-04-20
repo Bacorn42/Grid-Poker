@@ -1,31 +1,51 @@
 "use strict"
 const bg = 'https://dobsondev.com/wp-content/uploads/2015/04/windows-playing-cards.png';
 const cards = [
-    '2s', '2c', '2d', '2h',
-    '3s', '3c', '3d', '3h',
-    '4s', '4c', '4d', '4h',
-    '5s', '5c', '5d', '5h',
-    '6s', '6c', '6d', '6h',
-    '7s', '7c', '7d', '7h',
-    '8s', '8c', '8d', '8h',
-    '9s', '9c', '9d', '9h',
-    '0s', '0c', '0d', '0h',
-    'js', 'jc', 'jd', 'jh',
-    'qs', 'qc', 'qd', 'qh',
-    'ks', 'kc', 'kd', 'kh',
-    'as', 'ac', 'ad', 'ah',    
+    'ac', '2c', '3c', '4c', '5c', '6c', '7c', '8c', '9c', '0c', 'jc', 'qc', 'kc', 
+    'ah', '2h', '3h', '4h', '5h', '6h', '7h', '8h', '9h', '0h', 'jh', 'qh', 'kh', 
+    'as', '2s', '3s', '4s', '5s', '6s', '7s', '8s', '9s', '0s', 'js', 'qs', 'ks', 
+    'ad', '2d', '3d', '4d', '5d', '6d', '7d', '8d', '9d', '0d', 'jd', 'qd', 'kd',     
 ];
+const cell = document.querySelector('.deck .cell');
+const pile = document.querySelector('.deck .pile');
+const deckElem = document.querySelector('.deck');
 
 function Game() {
     this.deck = [];
+    this.cardElements = [];
+    this.cardNumber = 0;
     
     this.start = function() {
         this.shuffle();
+        this.createPile();
+        this.drawCard();
         console.log(this.deck);
     }
     
     this.shuffle = function() {
         this.deck = [...cards].sort(() => Math.random() - 0.5);
+    }
+    
+    this.createPile = function() {
+        for(let i = 0; i < 25; i++) {
+            let card = document.createElement('div');
+            card.style.position = 'absolute';
+            card.style.top = pile.offsetTop;
+            card.style.left = pile.offsetLeft;
+            card.classList.add('card'); 
+            deckElem.appendChild(card);
+            this.cardElements.push(card);
+        }
+    }
+    
+    this.drawCard = function() {
+        this.cardElements[this.cardNumber].style.left = cell.offsetLeft;
+        setTimeout(() => this.faceUp(), 1000);
+    }
+    
+    this.faceUp = function() {
+        let cardIndex = cards.indexOf(this.deck[this.cardNumber]);
+        this.cardElements[this.cardNumber].style.background = "url(" + bg + ") -" + ((cardIndex % 13) * 73 + 2) + "px -" + (Math.floor(cardIndex / 13) * 98 + 1) + "px";
     }
 }
 

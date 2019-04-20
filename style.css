@@ -2,10 +2,35 @@ body {
     background-color: #CCC;
 }
 
+.card {
+    width: 71px;
+    height: 97px;
+    background: repeating-linear-gradient(to top right, #009 0%, #FFF 2%);
+    transition: left 1s;
+}
+
 .cell {
     width: 71px;
     height: 97px;
     background-color: #AAA;
     margin: 10px;
     display: inline-block;
+}
+
+.deck {
+    padding-top: 20px;
+    position: relative;
+}
+
+.deck .cell {
+    margin: 0;
+    margin-left: calc(71px + 30px);
+}
+
+.pile {
+    margin-left: calc(71px + 36px);
+    display: inline-block;
+    width: 71px;
+    height: 97px;
+    background: repeating-linear-gradient(to top right, #009 0%, #FFF 2%)
 }

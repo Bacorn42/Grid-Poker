@@ -1,3 +1,4 @@
+const board = document.querySelector('.board');
 for(let i = 0; i < 5; i++) {
     let row = document.createElement('div');
     row.classList.add('row');
@@ -6,5 +7,5 @@ for(let i = 0; i < 5; i++) {
         element.classList.add('cell');
         row.appendChild(element);
     }
-    document.body.appendChild(row);
+    board.appendChild(row);
 }
