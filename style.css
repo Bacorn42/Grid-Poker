@@ -133,6 +133,10 @@ tbody tr:nth-child(even) {
     background-color: rgb(255, 255, 255, 0.15);
 }
 
+tr {
+    transition: box-shadow 1s;
+}
+
 button {
     display: block;
     width: 70%;

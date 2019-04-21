@@ -35,7 +35,7 @@ function Game() {
     this.cardNumber = 0;
     this.hands = Array(25);
     this.handsCards = Array(25);
-    this.scoreLinesHistory = Array(12).fill(-1);
+    this.scoreLinesHistory = Array(12).fill(9);
     this.canClick = false;
     
     this.start = function() {
@@ -109,22 +109,22 @@ function Game() {
             if(this.checkRoyalFlush(cards)) {
                 usScore += usScores[0];
                 gbScore += gbScores[0];
-                this.scoreLinesHistory[i] = 8;
+                this.scoreLinesHistory[i] = 0;
             }
             else if(this.checkStraightFlush(cards)) {
                 usScore += usScores[1];
                 gbScore += gbScores[1];
-                this.scoreLinesHistory[i] = 7;
+                this.scoreLinesHistory[i] = 1;
             }
             else if(this.checkFourKind(cards)) {
                 usScore += usScores[2];
                 gbScore += gbScores[2];
-                this.scoreLinesHistory[i] = 6;
+                this.scoreLinesHistory[i] = 2;
             }
             else if(this.checkFullHouse(cards)) {
                 usScore += usScores[3];
                 gbScore += gbScores[3];
-                this.scoreLinesHistory[i] = 5;
+                this.scoreLinesHistory[i] = 3;
             }
             else if(this.checkFlush(cards)) {
                 usScore += usScores[4];
@@ -134,25 +134,25 @@ function Game() {
             else if(this.checkStraight(cards)) {
                 usScore += usScores[5];
                 gbScore += gbScores[5];
-                this.scoreLinesHistory[i] = 3;
+                this.scoreLinesHistory[i] = 5;
             }
             else if(this.checkThreeKind(cards)) {
                 usScore += usScores[6];
                 gbScore += gbScores[6];
-                this.scoreLinesHistory[i] = 2;
+                this.scoreLinesHistory[i] = 6;
             }
             else if(this.checkTwoPair(cards)) {
                 usScore += usScores[7];
                 gbScore += gbScores[7];
-                this.scoreLinesHistory[i] = 1;
+                this.scoreLinesHistory[i] = 7;
             }
             else if(this.checkPair(cards)) {
                 usScore += usScores[8];
                 gbScore += gbScores[8];
-                this.scoreLinesHistory[i] = 0;
+                this.scoreLinesHistory[i] = 8;
             }
-            if(oldScoreLinesHistory[i] < this.scoreLinesHistory[i]) {
-                this.glow(scoreLines[i]);
+            if(oldScoreLinesHistory[i] > this.scoreLinesHistory[i]) {
+                this.glow(i);
             }
         }
         document.querySelector('.us-score').innerHTML = usScore;
@@ -227,13 +227,16 @@ function Game() {
         return counter.sort((a, b) => b - a);
     }
     
-    this.glow = function(scoreLine) {
+    this.glow = function(i) {
+        let scoreLine = scoreLines[i];
         for(let index of scoreLine) {
             if(this.handsCards[index]) {
                 setTimeout(() => this.handsCards[index].classList.add('glow'), 900);
                 setTimeout(() => this.removeGlow(index), 1900);
             }
         }
+        setTimeout(() => document.querySelectorAll('tbody tr')[this.scoreLinesHistory[i]].classList.add('glow'), 900);
+        setTimeout(() => document.querySelectorAll('tbody tr')[this.scoreLinesHistory[i]].classList.remove('glow'), 1900);
     }
     
     this.removeGlow = function(index) {
@@ -249,7 +252,7 @@ function Game() {
         this.cardNumber = 0;
         this.hands = Array(25);
         this.handsCards = Array(25);
-        this.scoreLinesHistory = Array(12).fill(-1);
+        this.scoreLinesHistory = Array(12).fill(9);
         this.canClick = false;
         document.querySelector('.us-score').innerHTML = 0;
         document.querySelector('.gb-score').innerHTML = 0;
