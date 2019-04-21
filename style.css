@@ -21,7 +21,11 @@ body {
     width: 71px;
     height: 97px;
     background: repeating-linear-gradient(to top right, #009 0%, #FFF 2%);
-    transition: left 1s, top 1s;
+    transition: left 1s, top 1s, box-shadow 1s;
+}
+
+.glow {
+    box-shadow: 0px 0px 16px 4px rgba(255,255,0,1);
 }
 
 .flip {
