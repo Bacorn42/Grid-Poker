@@ -36,6 +36,10 @@ body {
     animation-fill-mode: forwards;
 }
 
+.remove {
+    animation: rotate-back 1s;
+}
+
 @keyframes flip {
     0% {
         width: 71px;
@@ -57,6 +61,15 @@ body {
     }
     100% {
         transform: rotate(180deg);
+    }
+}
+
+@keyframes rotate-back {
+    0% {
+        transform: rotate(180deg);
+    }
+    100% {
+        transform: rotate(360deg);
     }
 }
 

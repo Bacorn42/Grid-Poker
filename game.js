@@ -244,9 +244,7 @@ function Game() {
     }
     
     this.restart = function() {
-        for(let card of this.cardElements) {
-            card.parentElement.removeChild(card);
-        }
+        this.removeCards();
         this.deck = [];
         this.cardElements = [];
         this.cardNumber = 0;
@@ -261,6 +259,19 @@ function Game() {
             row.classList.remove('glow');
         }
         this.start();
+    }
+    
+    this.removeCards = function() {
+        for(let i = 0; i < this.cardElements.length; i++) {
+            let card = this.cardElements[i];
+            setTimeout(() => card.parentElement.removeChild(card), 1000);
+            if(i < this.cardNumber) {
+                card.style.top = pile.offsetTop;
+                card.style.left = pile.offsetLeft;
+                card.style.zIndex = 0;
+                card.classList.add('remove');
+            }
+        }
     }
 }
 
