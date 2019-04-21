@@ -1,5 +1,5 @@
 "use strict"
-const bg = 'https://dobsondev.com/wp-content/uploads/2015/04/windows-playing-cards.png';
+const bg = 'cards.png';
 const cards = [
     'ac', '2c', '3c', '4c', '5c', '6c', '7c', '8c', '9c', '0c', 'jc', 'qc', 'kc', 
     'ah', '2h', '3h', '4h', '5h', '6h', '7h', '8h', '9h', '0h', 'jh', 'qh', 'kh', 
