@@ -265,7 +265,7 @@ function Game() {
         for(let i = 0; i < this.cardElements.length; i++) {
             let card = this.cardElements[i];
             setTimeout(() => card.parentElement.removeChild(card), 1000);
-            if(i < this.cardNumber) {
+            if(i <= this.cardNumber) {
                 card.style.top = pile.offsetTop;
                 card.style.left = pile.offsetLeft;
                 card.style.zIndex = 0;
