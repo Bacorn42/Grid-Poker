@@ -12,6 +12,23 @@ const deckElem = document.querySelector('.deck');
 const deck = document.querySelector('.deck');
 const cells = document.querySelectorAll('.board .cell');
 
+const scoreLines = [
+    [0, 1, 2, 3, 4],
+    [5, 6, 7, 8, 9],
+    [10, 11, 12, 13, 14],
+    [15, 16, 17, 18, 19],
+    [20, 21, 22, 23, 24],
+    [0, 5, 10, 15, 20],
+    [1, 6, 11, 16, 21],
+    [2, 7, 12, 17, 22],
+    [3, 8, 13, 18, 23],
+    [4, 9, 14, 19, 24],
+    [0, 6, 12, 18, 24],
+    [4, 8, 12, 16, 20],
+];
+
+const rankOrder = ['2', '3', '4', '5', '6', '7', '8', '9', '0', 'j', 'q', 'k', 'a']
+
 function Game() {
     this.deck = [];
     this.cardElements = [];
@@ -76,14 +93,122 @@ function Game() {
             if(this.cardNumber < 25) {
                 this.drawCard();
             }
-            else {
-                this.endGame();
-            }
+            this.calculateScore();
         }
     }
     
-    this.endGame = function() {
-        console.log("game ended!");
+    this.calculateScore = function() {
+        let usScore = 0;
+        let gbScore = 0;
+        for(let scoreLine of scoreLines) {
+            let cards = scoreLine.map(i => this.hands[i]).sort();
+            if(this.checkRoyalFlush(cards)) {
+                usScore += usScores[0];
+                gbScore += gbScores[0];
+            }
+            else if(this.checkStraightFlush(cards)) {
+                usScore += usScores[1];
+                gbScore += gbScores[1];
+            }
+            else if(this.checkFourKind(cards)) {
+                usScore += usScores[2];
+                gbScore += gbScores[2];
+            }
+            else if(this.checkFullHouse(cards)) {
+                usScore += usScores[3];
+                gbScore += gbScores[3];
+            }
+            else if(this.checkFlush(cards)) {
+                usScore += usScores[4];
+                gbScore += gbScores[4];
+            }
+            else if(this.checkStraight(cards)) {
+                usScore += usScores[5];
+                gbScore += gbScores[5];
+            }
+            else if(this.checkThreeKind(cards)) {
+                usScore += usScores[6];
+                gbScore += gbScores[6];
+            }
+            else if(this.checkTwoPair(cards)) {
+                usScore += usScores[7];
+                gbScore += gbScores[7];
+            }
+            else if(this.checkPair(cards)) {
+                usScore += usScores[8];
+                gbScore += gbScores[8];
+            }
+        }
+        document.querySelector('.us-score').innerHTML = usScore;
+        document.querySelector('.gb-score').innerHTML = gbScore;
+    }
+    
+    this.checkRoyalFlush = function(cards) {
+        if(!cards[4]) {
+            return false;
+        }
+        return cards[0][0] === '0' && cards[1][0] === 'a' && cards[2][0] === 'j' && cards[3][0] === 'k' && cards[4][0] === 'q' &&
+               this.checkFlush(cards);
+    }
+    
+    this.checkStraightFlush = function(cards) {
+        if(!cards[4]) {
+            return false;
+        }
+        return this.checkFlush(cards) && this.checkStraight(cards);
+    }
+    
+    this.checkFourKind = function(cards) {
+        return this.getCount(cards)[0] === 4;
+    }
+    
+    this.checkFullHouse = function(cards) {
+        if(!cards[4]) {
+            return false;
+        }
+        let count = this.getCount(cards);
+        return count[0] === 3 && count[1] === 2;
+    }
+    
+    this.checkFlush = function(cards) {
+        if(!cards[4]) {
+            return false;
+        }
+        return cards[0][1] === cards[1][1] && cards[1][1] === cards[2][1] && cards[2][1] === cards[3][1] && cards[3][1] === cards[4][1];
+    }
+    
+    this.checkStraight = function(cards) {
+        if(!cards[4]) {
+            return false;
+        }
+        let vals = cards.map(card => rankOrder.indexOf(card[0])).sort((a, b) => a - b);
+        let count = this.getCount(cards);
+        return count[4] === 1 && (vals[4] - vals[0]) === 4;
+    }
+    
+    this.checkThreeKind = function(cards) {
+        return this.getCount(cards)[0] === 3;
+    }
+    
+    this.checkTwoPair = function(cards) {
+        let count = this.getCount(cards);
+        return count[0] === 2 && count[1] === 2;
+    }
+    
+    this.checkPair = function(cards) {
+        return this.getCount(cards)[0] === 2;
+    }
+    
+    this.getCount = function(cards) {
+        let counter = [];
+        for(let rank of cards) {
+            if(!rank) {
+                continue;
+            }
+            let index = rank.charCodeAt(0);
+            counter[index] ? counter[index]++ : counter[index] = 1;
+        }
+        return counter.sort((a, b) => b - a);
     }
     
     this.restart = function() {
@@ -95,6 +220,8 @@ function Game() {
         this.cardNumber = 0;
         this.hands = Array(25);
         this.canClick = false;
+        document.querySelector('.us-score').innerHTML = 0;
+        document.querySelector('.gb-score').innerHTML = 0;
         this.start();
     }
 }
