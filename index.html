@@ -4,10 +4,37 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-  <div class="board"></div>
-  <div class="deck">
-    <div class="cell"></div>
-    <div class="pile"></div>
+  <div class="game">
+    <div class="board"></div>
+    <br>
+    <div class="deck">
+      <div class="cell"></div>
+      <div class="pile"></div>
+    </div>
+    <div class="scoring">
+      <table>
+        <thead>
+          <tr>
+            <th>Hand</th>
+            <th>US</th>
+            <th>GB</th>
+          </tr>
+        </thead>
+        <tbody class="table-body">
+        </tbody>
+      </table>
+      <div class="score">
+        US Score 
+        <div class='us-score'>0</div>
+      </div>
+      <div class="score">
+        GB Score 
+        <div class='gb-score'>0</div>
+      </div>
+      <div class="button-container">
+        <button>Restart</button>
+      </div>
+    </div>
   </div>
   <script src="init.js"></script>
   <script src="game.js"></script>

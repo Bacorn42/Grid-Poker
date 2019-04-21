@@ -17,7 +17,7 @@ function Game() {
     this.cardElements = [];
     this.cardNumber = 0;
     this.hands = Array(25);
-    this.canCLick = true;
+    this.canClick = false;
     
     this.start = function() {
         this.initCells();
@@ -42,6 +42,7 @@ function Game() {
             card.style.position = 'absolute';
             card.style.top = pile.offsetTop;
             card.style.left = pile.offsetLeft;
+            card.style.zIndex = 25 - i;
             card.classList.add('card'); 
             deckElem.appendChild(card);
             this.cardElements.push(card);
@@ -66,17 +67,40 @@ function Game() {
             this.canClick = false;
             let card = this.cardElements[this.cardNumber];
             let cell = cells[index];
-            card.style.top = "-" + (deck.offsetTop - cell.offsetTop) + "px";
-            card.style.left = (cell.offsetLeft - 8) + "px";
+            card.style.top = "-" + (deck.offsetTop - cell.offsetTop - 1) + "px";
+            card.style.left = (11 + (index % 5) * 93) + "px";
+            card.style.zIndex = 25 + this.cardNumber;
             card.classList.add('rotate');
             this.hands[index] = this.deck[this.cardNumber];
             this.cardNumber++;
-            this.drawCard();
+            if(this.cardNumber < 25) {
+                this.drawCard();
+            }
+            else {
+                this.endGame();
+            }
         }
+    }
+    
+    this.endGame = function() {
+        console.log("game ended!");
+    }
+    
+    this.restart = function() {
+        for(let card of this.cardElements) {
+            card.parentElement.removeChild(card);
+        }
+        this.deck = [];
+        this.cardElements = [];
+        this.cardNumber = 0;
+        this.hands = Array(25);
+        this.canClick = false;
+        this.start();
     }
 }
 
 window.onload = function() {
     const game = new Game();
+    document.querySelector('button').onclick = game.restart.bind(game);
     game.start();
 }
