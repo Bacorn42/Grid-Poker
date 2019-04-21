@@ -256,6 +256,10 @@ function Game() {
         this.canClick = false;
         document.querySelector('.us-score').innerHTML = 0;
         document.querySelector('.gb-score').innerHTML = 0;
+        let rows = document.querySelectorAll('tbody tr');
+        for(let row of rows) {
+            row.classList.remove('glow');
+        }
         this.start();
     }
 }
