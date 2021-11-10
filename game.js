@@ -60,10 +60,13 @@ function Game() {
         for(let i = 0; i < 25; i++) {
             let card = document.createElement('div');
             card.style.position = 'absolute';
-            card.style.top = pile.offsetTop;
+            card.style.top = pile.offsetTop - 1;
             card.style.left = pile.offsetLeft;
             card.style.zIndex = 25 - i;
-            card.classList.add('card'); 
+            card.classList.add('card');
+            if(bgIndex === 1) {
+                card.classList.add('chips');
+            }
             deckElem.appendChild(card);
             this.cardElements.push(card);
         }
