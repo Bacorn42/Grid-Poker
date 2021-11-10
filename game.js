@@ -1,5 +1,6 @@
 "use strict"
-const bg = 'cards.png';
+const bg = ['cards.png', 'cards_chips.png'];
+let bgIndex = 0;
 const cards = [
     'ac', '2c', '3c', '4c', '5c', '6c', '7c', '8c', '9c', '0c', 'jc', 'qc', 'kc', 
     'ah', '2h', '3h', '4h', '5h', '6h', '7h', '8h', '9h', '0h', 'jh', 'qh', 'kh', 
@@ -76,9 +77,25 @@ function Game() {
     }
     
     this.faceUp = function() {
-        let cardIndex = cards.indexOf(this.deck[this.cardNumber]);
-        this.cardElements[this.cardNumber].style.background = "url(" + bg + ") -" + ((cardIndex % 13) * 73 + 2) + "px -" + (Math.floor(cardIndex / 13) * 98 + 1) + "px";
+        this.setCardImage(this.cardNumber);
+    }
+
+    this.setCardImage = function(cardNumber) {
+        let cardIndex = cards.indexOf(this.deck[cardNumber]);
+        let x = (cardIndex % 13) * 73 + 2;
+        let y = Math.floor(cardIndex / 13) * 98 + 1;
+        if(bgIndex === 1) {
+            x = (cardIndex % 13) * 70;
+            y = Math.floor(cardIndex / 13) * 98;
+        }
+        this.cardElements[cardNumber].style.background = "url(" + bg[bgIndex] + ") -" + x + "px -" + y + "px";
         this.canClick = true;
+    }
+
+    this.updateCardImages = function() {
+        for(let i = 0; i <= this.cardNumber; i++) {
+            this.setCardImage(i);
+        }
     }
     
     this.place = function(index) {
@@ -86,8 +103,13 @@ function Game() {
             this.canClick = false;
             let card = this.cardElements[this.cardNumber];
             let cell = cells[index];
-            card.style.top = "-" + (deck.offsetTop - cell.offsetTop - 1) + "px";
-            card.style.left = (11 + (index % 5) * 93) + "px";
+            let x = 11 + (index % 5) * 93;
+            let y = deck.offsetTop - cell.offsetTop - 1;
+            if(bgIndex === 1) {
+                x = 11 + (index % 5) * 92;
+            }
+            card.style.left = x + "px";
+            card.style.top = "-" + y + "px";
             card.style.zIndex = 25 + this.cardNumber;
             card.classList.add('rotate');
             this.hands[index] = this.deck[this.cardNumber];
@@ -97,6 +119,21 @@ function Game() {
                 this.drawCard();
             }
             this.calculateScore();
+        }
+    }
+
+    this.updateCardPlacements = function() {
+        for(let i = 0; i < this.cardNumber; i++) {
+            let card = this.cardElements[i];
+            const index = this.handsCards.indexOf(card);
+            let cell = cells[index];
+            let x = 11 + (index % 5) * 93;
+            let y = deck.offsetTop - cell.offsetTop - 1;
+            if(bgIndex === 1) {
+                x = 11 + (index % 5) * 92;
+            }
+            card.style.left = x + "px";
+            card.style.top = "-" + y + "px";
         }
     }
     
@@ -277,6 +314,17 @@ function Game() {
 
 window.onload = function() {
     const game = new Game();
-    document.querySelector('button').onclick = game.restart.bind(game);
+    document.querySelector('#button-restart').onclick = game.restart.bind(game);
+    document.querySelector('#button-deck').onclick = () => {
+        bgIndex = (bgIndex === 0) ? 1 : 0;
+        for(const element of document.querySelectorAll('.card')) {
+            element.classList.toggle('chips');
+        }
+        for(const element of document.querySelectorAll('.cell')) {
+            element.classList.toggle('chips');
+        }
+        game.updateCardImages();
+        game.updateCardPlacements();
+    }
     game.start();
 }
